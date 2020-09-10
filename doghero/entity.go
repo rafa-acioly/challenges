@@ -4,14 +4,6 @@ import (
 	"time"
 )
 
-type WalkingStatus int
-
-const (
-	WalkingPending WalkingStatus = iota
-	WalkingInProgress
-	WalkingFinished
-)
-
 type DogWalking struct {
 	Status      WalkingStatus `json:"status"`
 	ScheduledTo time.Time     `json:"scheduled_to"`

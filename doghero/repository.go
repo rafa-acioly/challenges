@@ -2,16 +2,7 @@ package doghero
 
 import "time"
 
-type WalkingFilter int
-
-const (
-	// All represents all walkings
-	All WalkingFilter = iota
-	// Next represents all walkings in the future
-	Next
-
-	collectionName = "dog_walking"
-)
+const collectionName = "dog_walking"
 
 type Repository struct{}
 

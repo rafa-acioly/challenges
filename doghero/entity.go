@@ -17,13 +17,12 @@ type DogWalking struct {
 }
 
 // NewWalk retrieves a new walking instance with
-// some default values setted
-func NewWalk() *DogWalking {
-	return &DogWalking{Status: WalkingPending}
+// some default values pre-defined
+func NewWalk() DogWalking {
+	return DogWalking{Status: WalkingPending}
 }
 
 // Show retrieves the walk duration in minutes
 func (d *DogWalking) Show() float64 {
-	return d.StartAt.Sub(d.EndAt).Minutes()
-
+	return d.EndAt.Sub(d.StartAt).Minutes()
 }

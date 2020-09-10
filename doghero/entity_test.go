@@ -12,18 +12,19 @@ type DogWalkingTestSuit struct {
 	suite.Suite
 }
 
-func (suite *DogWalkingTestSuit) TestNewWalk(t *testing.T) {
-	assert.Equal(suite.T(), new(DogWalking), NewWalk())
+func (suite *DogWalkingTestSuit) TestNewWalk() {
+	assert.Equal(suite.T(), DogWalking{}, NewWalk())
 }
 
 func (suite *DogWalkingTestSuit) TestShow() {
 	walking := NewWalk()
 
+	walking.StartAt = time.Now()
 	walking.EndAt = time.Now().Add(time.Hour * 2)
 
-	expected := 60
+	expected := 120.00
 
-	assert.Equal(suite.T(), expected, walking.Show())
+	assert.GreaterOrEqual(suite.T(), walking.Show(), expected)
 }
 
 func TestDogWalkingEntity(t *testing.T) {

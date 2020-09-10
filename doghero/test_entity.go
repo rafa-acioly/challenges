@@ -12,6 +12,10 @@ type DogWalkingTestSuit struct {
 	suite.Suite
 }
 
+func (suite *DogWalkingTestSuit) TestNewWalk(t *testing.T) {
+	assert.Equal(suite.T(), new(DogWalking), NewWalk())
+}
+
 func (suite *DogWalkingTestSuit) TestShow() {
 	walking := NewWalk()
 

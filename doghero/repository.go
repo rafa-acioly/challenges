@@ -1,15 +1,18 @@
 package doghero
 
-import "time"
+import (
+	"database/sql"
+	"time"
+)
 
-const collectionName = "dog_walking"
-
-type Repository struct{}
+type Repository struct {
+	database *sql.DB
+}
 
 // NewRepository retrieve a repository instance connection
 // to the walking database
-func NewRepository() Repository {
-	return Repository{}
+func NewRepository(db *sql.DB) Repository {
+	return Repository{database: db}
 }
 
 // Index retrieve a list of walking
@@ -23,11 +26,11 @@ func (r *Repository) Create(walking DogWalking) bool {
 }
 
 // StartWalk set the "StartAt" key to the current time
-func (r *Repository) StartWalk(walkingID int) (time.Time, error) {
+func (r *Repository) StartWalk(walkingUUID string) (time.Time, error) {
 	return time.Time{}, nil
 }
 
 // FinishWalk set the "EndAt" key to the current time
-func (r *Repository) FinishWalk(walkingID int) (time.Time, error) {
+func (r *Repository) FinishWalk(walkingUUID string) (time.Time, error) {
 	return time.Time{}, nil
 }

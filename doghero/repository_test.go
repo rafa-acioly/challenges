@@ -13,11 +13,9 @@ type RepositoryTestSuit struct {
 }
 
 func (suite *RepositoryTestSuit) SetupSuite() {
-	suite.repository = NewRepository()
 }
 
 func (suite *RepositoryTestSuit) TestNewRepository() {
-	assert.Equal(suite.T(), Repository{}, NewRepository())
 }
 
 func (suite *RepositoryTestSuit) TestIndexFilterAll() {
@@ -36,7 +34,15 @@ func (suite *RepositoryTestSuit) TestStartWalk() {
 
 }
 
+func (suite *RepositoryTestSuit) TestCannotStartWalkAlreadyStarted() {
+
+}
+
 func (suite *RepositoryTestSuit) TestFinishWalk() {
+
+}
+
+func (suite *RepositoryTestSuit) TestCannotFinishWithoutStarting() {
 
 }
 

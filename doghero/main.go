@@ -1,1 +1,4 @@
 package doghero
+
+func main() {
+}

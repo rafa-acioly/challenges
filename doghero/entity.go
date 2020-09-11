@@ -2,9 +2,12 @@ package doghero
 
 import (
 	"time"
+
+	"github.com/google/uuid"
 )
 
 type DogWalking struct {
+	ID          string        `json:"id"`
 	Status      WalkingStatus `json:"status"`
 	ScheduledTo time.Time     `json:"scheduled_to"`
 	Price       float64       `json:"price"`
@@ -19,7 +22,10 @@ type DogWalking struct {
 // NewWalk retrieves a new walking instance with
 // some default values pre-defined
 func NewWalk() DogWalking {
-	return DogWalking{Status: WalkingPending}
+	return DogWalking{
+		ID:     uuid.New().String(),
+		Status: WalkingPending,
+	}
 }
 
 // Show retrieves the walk duration in minutes

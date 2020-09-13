@@ -1,4 +1,4 @@
-package doghero
+package entities
 
 import (
 	"testing"

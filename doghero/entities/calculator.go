@@ -7,12 +7,12 @@ import (
 const (
 	// ThirtyMinutesPrice 30 minutes & 1 pet
 	ThirtyMinutesPrice = 25 // R$25.00
-	// ThirtyMinutesAditionalPrice aditional value from more then 1 pet
+	// ThirtyMinutesAditionalPrice additional value from more then 1 pet
 	ThirtyMinutesAditionalPrice = 15 // R$5.00
 
 	// SixtyMinutesPrice 60 minutes & 1 pet
 	SixtyMinutesPrice = 30 // R$35.00
-	// SixtyMinutesAditionalPrice adicional value for more then 1 pet
+	// SixtyMinutesAditionalPrice additional value for more then 1 pet
 	SixtyMinutesAditionalPrice = 20 // R$10.00
 )
 

@@ -10,6 +10,13 @@ import (
 	"github.com/google/uuid"
 )
 
+// DogWalking represents the walking information structure
+//
+// Questions:
+// 	- The price is defined after the user set the "end_at"?
+// 	- The price is defined by the duration field?
+// 	- The walk duration should be defined from "start_at" and "end_at"?
+// 	- A walk duration can be a "broken" value? not fixed values (multiples of 30 or 60)
 type DogWalking struct {
 	ID          string        `json:"id"`
 	Status      WalkingStatus `json:"status"`

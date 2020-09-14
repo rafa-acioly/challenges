@@ -30,9 +30,10 @@ func (suite *RepositoryTestSuit) TestIndexFilterAll() {
 		ExpectQuery("SELECT \\* FROM walks").
 		WillReturnRows(mockedRows)
 
-	result := suite.repository.Index(All, 0)
+	result, err := suite.repository.Index(true, 0)
 
 	assert.NoError(suite.T(), suite.mock.ExpectationsWereMet())
+	assert.NoError(suite.T(), err)
 	assert.NotEmpty(suite.T(), result)
 	assert.Len(suite.T(), result, 2)
 }
@@ -44,9 +45,10 @@ func (suite *RepositoryTestSuit) TestIndexFilterNext() {
 		ExpectQuery("SELECT \\* FROM walks").
 		WillReturnRows(mockedRows)
 
-	result := suite.repository.Index(Next, 0)
+	result, err := suite.repository.Index(false, 0)
 
 	assert.NoError(suite.T(), suite.mock.ExpectationsWereMet())
+	assert.NoError(suite.T(), err)
 	assert.NotEmpty(suite.T(), result)
 	assert.Len(suite.T(), result, 1)
 }

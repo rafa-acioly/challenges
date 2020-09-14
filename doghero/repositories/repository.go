@@ -3,7 +3,6 @@ package repositories
 import (
 	"database/sql"
 	"errors"
-	"log"
 	"time"
 
 	"github.com/rafa-acioly/challenges/entities"
@@ -11,7 +10,7 @@ import (
 
 // Repository represents a contract
 type Repository interface {
-	Index(filter WalkingFilter, page int) []entities.DogWalking
+	Index(showAll bool, page int) ([]entities.DogWalking, error)
 	Create(walking entities.DogWalking) (bool, error)
 	StartWalk(walkingUUID string) (time.Time, error)
 	FinishWalk(walkingUUID string) (time.Time, error)
@@ -28,26 +27,30 @@ func NewDogWalkRepository(db *sql.DB) Repository {
 }
 
 // Index retrieve a list of walking
-func (r dogWalkRepository) Index(filter WalkingFilter, page int) []entities.DogWalking {
-	query := r.filterQuery(filter)
+func (r dogWalkRepository) Index(showAll bool, page int) ([]entities.DogWalking, error) {
+	query := r.filterQuery(showAll)
 	rows, _ := r.database.Query(query)
 	defer rows.Close()
 
 	var results []entities.DogWalking
 	for rows.Next() {
 		var entity entities.DogWalking
-		if err := rows.Scan(&entity.ID, &entity.Status, &entity.ScheduledTo); err != nil {
-			log.Fatal(err.Error())
+		if err := rows.Scan(
+			&entity.ID, &entity.Status, &entity.ScheduledTo,
+			&entity.Price, &entity.Duration, &entity.Lat, &entity.Long,
+			&entity.Pets, &entity.StartAt, &entity.EndAt,
+		); err != nil {
+			return results, err
 		}
 
 		results = append(results, entity)
 	}
 
-	return results
+	return results, nil
 }
 
-func (r dogWalkRepository) filterQuery(filter WalkingFilter) string {
-	if filter == 0 {
+func (r dogWalkRepository) filterQuery(showAll bool) string {
+	if showAll {
 		return "SELECT * FROM walks LIMIT 20"
 	}
 
@@ -56,10 +59,11 @@ func (r dogWalkRepository) filterQuery(filter WalkingFilter) string {
 
 // Create insert a new walking record on the database
 func (r dogWalkRepository) Create(walking entities.DogWalking) (bool, error) {
-	stmt, err := r.database.Prepare("INSERT INTO walks VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+	stmt, err := r.database.Prepare("INSERT INTO walks VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)")
 	if err != nil {
 		return false, err
 	}
+	defer stmt.Close()
 
 	result, err := stmt.Exec(
 		walking.ID, walking.Status,

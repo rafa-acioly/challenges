@@ -2,8 +2,13 @@ package api
 
 import (
 	"database/sql"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
+	"strconv"
+
+	"github.com/rafa-acioly/challenges/entities"
 
 	"github.com/go-chi/chi"
 	"github.com/rafa-acioly/challenges/repositories"
@@ -21,25 +26,60 @@ func NewDogWalkResource(db *sql.DB) Resource {
 
 // Routes attach the http verbs and handlers to the resource
 func (rsc *Resource) Routes(router chi.Router) {
-	router.Get("/{id}/", rsc.Get)
-	router.Get("/", rsc.List)
+	router.Get("/", rsc.Get)
 	router.Post("/", rsc.Post)
 	router.Put("/{id}/", rsc.Put)
 }
 
 // Get represents the HTTP Get verb to get a single walk resource
 func (rsc *Resource) Get(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "Get resource")
-}
+	showAll, err := strconv.ParseBool(r.URL.Query().Get("show_all"))
+	if err != nil {
+		fmt.Println(err.Error())
+		showAll = false
+	}
 
-// List represents the HTTP Get verb to list the walk resources
-func (rsc *Resource) List(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "List resource")
+	w.Header().Set("content-type", "application/json")
+	responseEncoder := json.NewEncoder(w)
+
+	walkings, err := rsc.repository.Index(showAll, 0)
+	if err != nil {
+		responseEncoder.Encode(ErrRender(nil, http.StatusInternalServerError, err))
+	}
+
+	responseEncoder.Encode(walkings)
 }
 
 // Post represents the HTTP Post verb
 func (rsc *Resource) Post(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "Post resource")
+	walk := entities.NewWalk()
+	w.Header().Set("content-type", "application/json")
+	encoder := json.NewEncoder(w)
+
+	requestContent, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	if err = json.Unmarshal(requestContent, &walk); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	if err = walk.Valid(); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		encoder.Encode(ErrRender(err, http.StatusBadRequest, err))
+		return
+	}
+
+	_, err = rsc.repository.Create(walk)
+	if err != nil {
+		encoder.Encode(ErrRender(nil, http.StatusInternalServerError, err))
+		return
+	}
+
+	encoder.Encode(walk)
 }
 
 // Put represents the HTTP Put verb

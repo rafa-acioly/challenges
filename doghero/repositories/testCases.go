@@ -13,8 +13,8 @@ var walkingStub = entities.DogWalking{
 	ScheduledTo: time.Now().AddDate(0, 0, 1), // tomorrow
 	Price:       25,
 	Duration:    30,
-	Lat:         0,
-	Long:        0,
+	Lat:         "0",
+	Long:        "0",
 	Pets:        1,
 	StartAt:     time.Time{},
 	EndAt:       time.Time{},
@@ -27,8 +27,8 @@ var walkingInPast = entities.DogWalking{
 	ScheduledTo: time.Now().AddDate(0, 0, -2), // 2 days ago
 	Price:       25,
 	Duration:    30,
-	Lat:         0,
-	Long:        0,
+	Lat:         "0",
+	Long:        "0",
 	Pets:        1,
 	StartAt:     time.Now().AddDate(0, 0, -1), // yesterday
 	EndAt:       time.Now().AddDate(0, 0, -1), // yesterday
@@ -41,8 +41,8 @@ var walkInFuture = entities.DogWalking{
 	ScheduledTo: time.Now().AddDate(0, 0, 2), // 2 days
 	Price:       25,
 	Duration:    30,
-	Lat:         0,
-	Long:        0,
+	Lat:         "0",
+	Long:        "0",
 	Pets:        1,
 	StartAt:     time.Time{},
 	EndAt:       time.Time{},

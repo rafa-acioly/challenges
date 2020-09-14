@@ -10,7 +10,7 @@ import (
 	"github.com/go-chi/chi/middleware"
 	"github.com/rafa-acioly/challenges/config"
 
-	_ "github.com/mattn/go-sqlite3"
+	_ "github.com/lib/pq" // postgres golang driver
 )
 
 // App represents a basic app structure
@@ -28,9 +28,19 @@ func (a *App) Initialize(settings config.Config) {
 
 // SetDatabaseConnection creates a database connection
 func (a *App) SetDatabaseConnection(settings config.Config) {
-	database, err := sql.Open("sqlite3", "../doghero.db")
+	dsn := fmt.Sprintf(
+		"host=%s port=%s user=%s dbname=%s sslmode=disable password=%s",
+		settings.DB.Host, settings.DB.Port,
+		settings.DB.User, settings.DB.Name,
+		settings.DB.Password,
+	)
+	database, err := sql.Open("postgres", dsn)
 	if err != nil {
-		log.Fatal("Database connection issue: " + err.Error())
+		log.Fatal("database connection issue: " + err.Error())
+	}
+
+	if err := database.Ping(); err != nil {
+		log.Fatal("database connection issue: " + err.Error())
 	}
 
 	a.DB = database

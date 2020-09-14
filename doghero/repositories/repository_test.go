@@ -64,9 +64,10 @@ func (suite *RepositoryTestSuit) TestCreate() {
 		).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 
-	result := suite.repository.Create(walkingStub)
+	result, err := suite.repository.Create(walkingStub)
 
 	assert.NoError(suite.T(), suite.mock.ExpectationsWereMet())
+	assert.NoError(suite.T(), err)
 	assert.True(suite.T(), result)
 }
 

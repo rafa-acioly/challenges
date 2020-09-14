@@ -12,7 +12,7 @@ import (
 // Repository represents a contract
 type Repository interface {
 	Index(filter WalkingFilter, page int) []entities.DogWalking
-	Create(walking entities.DogWalking) bool
+	Create(walking entities.DogWalking) (bool, error)
 	StartWalk(walkingUUID string) (time.Time, error)
 	FinishWalk(walkingUUID string) (time.Time, error)
 }
@@ -55,10 +55,10 @@ func (r dogWalkRepository) filterQuery(filter WalkingFilter) string {
 }
 
 // Create insert a new walking record on the database
-func (r dogWalkRepository) Create(walking entities.DogWalking) bool {
+func (r dogWalkRepository) Create(walking entities.DogWalking) (bool, error) {
 	stmt, err := r.database.Prepare("INSERT INTO walks VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
 	if err != nil {
-		log.Fatal(err.Error())
+		return false, err
 	}
 
 	result, err := stmt.Exec(
@@ -69,14 +69,14 @@ func (r dogWalkRepository) Create(walking entities.DogWalking) bool {
 		walking.StartAt, walking.EndAt,
 	)
 	if err != nil {
-		log.Fatal(err.Error())
+		return false, err
 	}
 
 	if affected, _ := result.RowsAffected(); affected == 0 {
-		log.Fatal(errors.New("line not inserted on the database"))
+		return false, errors.New("line not inserted on the database")
 	}
 
-	return true
+	return true, nil
 }
 
 // StartWalk set the "StartAt" key to the current time and retrieve the time defined

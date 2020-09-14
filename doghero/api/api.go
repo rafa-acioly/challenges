@@ -35,7 +35,6 @@ func (rsc *Resource) Routes(router chi.Router) {
 func (rsc *Resource) Get(w http.ResponseWriter, r *http.Request) {
 	showAll, err := strconv.ParseBool(r.URL.Query().Get("show_all"))
 	if err != nil {
-		fmt.Println(err.Error())
 		showAll = false
 	}
 
@@ -44,7 +43,7 @@ func (rsc *Resource) Get(w http.ResponseWriter, r *http.Request) {
 
 	walkings, err := rsc.repository.Index(showAll, 0)
 	if err != nil {
-		responseEncoder.Encode(ErrRender(nil, http.StatusInternalServerError, err))
+		responseEncoder.Encode(NewHTTPError(nil, http.StatusInternalServerError, err))
 	}
 
 	responseEncoder.Encode(walkings)
@@ -69,13 +68,13 @@ func (rsc *Resource) Post(w http.ResponseWriter, r *http.Request) {
 
 	if err = walk.Valid(); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		encoder.Encode(ErrRender(err, http.StatusBadRequest, err))
+		encoder.Encode(NewHTTPError(err, http.StatusBadRequest, err))
 		return
 	}
 
 	_, err = rsc.repository.Create(walk)
 	if err != nil {
-		encoder.Encode(ErrRender(nil, http.StatusInternalServerError, err))
+		encoder.Encode(NewHTTPError(nil, http.StatusInternalServerError, err))
 		return
 	}
 

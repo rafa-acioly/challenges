@@ -12,16 +12,17 @@ type ErrResponse struct {
 	HTTPStatusCode int         `json:"-"`
 	StatusText     string      `json:"status"`
 	AppCode        int64       `json:"code,omitempty"`
-	ErrorText      string      `json:"error,omitempty"`
+	Cause          string      `json:"error,omitempty"`
 	Detail         interface{} `json:"detail"`
 }
 
-func ErrRender(content interface{}, status int, err error) *ErrResponse {
+// NewHTTPError parse the given values to parse it to a commom error response
+func NewHTTPError(content interface{}, status int, err error) *ErrResponse {
 	return &ErrResponse{
 		Err:            err,
 		HTTPStatusCode: status,
 		StatusText:     http.StatusText(status),
-		ErrorText:      err.Error(),
+		Cause:          err.Error(),
 		Detail:         content,
 	}
 }

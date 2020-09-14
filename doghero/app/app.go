@@ -53,8 +53,8 @@ func (a *App) AddRoute(pattern string, fn func(r chi.Router)) {
 
 // SetMiddlewares defines the middleware used on every http request
 func (a *App) SetMiddlewares() {
-	a.Router.Use(middleware.RequestID)
 	a.Router.Use(middleware.Logger)
+	a.Router.Use(middleware.AllowContentType("application/json"))
 	a.Router.Use(middleware.Recoverer)
 }
 

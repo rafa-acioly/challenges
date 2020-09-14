@@ -8,12 +8,12 @@ const (
 	// ThirtyMinutesPrice 30 minutes & 1 pet
 	ThirtyMinutesPrice = 25 // R$25.00
 	// ThirtyMinutesAditionalPrice additional value from more then 1 pet
-	ThirtyMinutesAditionalPrice = 15 // R$5.00
+	ThirtyMinutesAditionalPrice = 15 // R$15.00
 
 	// SixtyMinutesPrice 60 minutes & 1 pet
 	SixtyMinutesPrice = 30 // R$35.00
 	// SixtyMinutesAditionalPrice additional value for more then 1 pet
-	SixtyMinutesAditionalPrice = 20 // R$10.00
+	SixtyMinutesAditionalPrice = 20 // R$20.00
 )
 
 // GetWalkPrice calculates the walking price
